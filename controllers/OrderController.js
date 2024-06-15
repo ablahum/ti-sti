@@ -1,6 +1,7 @@
 const Order = require('../models/Order')
 const User = require('../models/User')
 const Trip = require('../models/Trip')
+const { validationResult } = require('express-validator')
 
 const getOrders = async (req, res) => {
   const userId = req.user.id
@@ -42,6 +43,11 @@ const getOrders = async (req, res) => {
 const createOrder = async (req, res) => {
   const userId = req.user.id
   const { origin, destination, date } = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({
+      errors: errors.array(),
+    })
 
   try {
     const user = await User.findByPk(userId)

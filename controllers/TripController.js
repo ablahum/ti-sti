@@ -1,6 +1,6 @@
 const Trip = require('../models/Trip')
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
   try {
     const data = await Trip.findAll()
 

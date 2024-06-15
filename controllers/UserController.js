@@ -1,12 +1,11 @@
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-
-// const JWT_SECRET = 'jwtSecret'
+const { validationResult } = require('express-validator')
 
 const { JWT_SECRET } = process.env
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
   try {
     const data = await User.findAll()
 
@@ -19,8 +18,13 @@ const getAll = async (req, res, next) => {
   }
 }
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const { name, password } = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({
+      errors: errors.array(),
+    })
 
   try {
     const user = await User.findOne({ where: { name } })
@@ -55,8 +59,13 @@ const login = async (req, res, next) => {
   }
 }
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
   const { name, password, role_id } = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({
+      errors: errors.array(),
+    })
 
   try {
     const salt = await bcrypt.genSalt(10)

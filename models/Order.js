@@ -7,14 +7,26 @@ const Order = sequelize.define(
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
     driver_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
     trip_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: 'Trips',
+        key: 'id',
+      },
     },
     date: {
       type: DataTypes.DATE,
@@ -22,8 +34,9 @@ const Order = sequelize.define(
     },
     status: {
       type: DataTypes.STRING,
-      defaultValue: 'pending',
       allowNull: false,
+      type: DataTypes.ENUM('pending', 'on-going', 'finished', 'canceled'),
+      defaultValue: 'pending',
     },
   },
   {
